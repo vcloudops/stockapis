@@ -1,5 +1,8 @@
+nsetools
 fastapi
 uvicorn
 yfinance
 pytest 
 httpx
+requests
+bs4

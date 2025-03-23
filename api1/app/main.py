@@ -1,10 +1,17 @@
 from fastapi import FastAPI
 import yfinance as yf
+import unittest
 
 app = FastAPI()
 
-# List of NIFTY 50 stock symbols (NSE India)
-NIFTY_50_SYMBOLS = [
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to NIFTY 50 Stock API"}
+
+@app.get("/nifty50")
+def get_nifty50():
+    """Fetches stock prices for NIFTY 50 stocks"""
+    nifty50_stocks = [
     "RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS", "ICICIBANK.NS",
     "HINDUNILVR.NS", "HDFC.NS", "BHARTIARTL.NS", "KOTAKBANK.NS", "SBIN.NS",
     "LT.NS", "ITC.NS", "ASIANPAINT.NS", "AXISBANK.NS", "MARUTI.NS",
@@ -15,34 +22,51 @@ NIFTY_50_SYMBOLS = [
     "BRITANNIA.NS", "HDFCLIFE.NS", "CIPLA.NS", "EICHERMOT.NS", "BAJAJ-AUTO.NS",
     "DRREDDY.NS", "APOLLOHOSP.NS", "TATACONSUM.NS", "HINDALCO.NS", "M&M.NS",
     "SBILIFE.NS", "NTPC.NS", "UPL.NS", "IOC.NS", "SHREECEM.NS"
-]
+    ]
+    stock_data = {}
 
-@app.get("/")
-def home():
-    return {"message": "Welcome to NIFTY 50 Stock API"}
+    for stock in nifty50_stocks:
+        ticker = yf.Ticker(stock)
+        data = ticker.history(period="1d")
+        if not data.empty:
+            stock_data[stock] = {
+                "price": round(data["Close"].iloc[-1], 2),
+                "volume": int(data["Volume"].iloc[-1]),
+                "open": round(data["Open"].iloc[-1], 2),
+                "high": round(data["High"].iloc[-1], 2),
+                "low": round(data["Low"].iloc[-1], 2)
+            }
 
-@app.get("/nifty50")
-def get_nifty50_data():
-    stocks_data = []
+    return stock_data
 
-    for symbol in NIFTY_50_SYMBOLS:
-        try:
-            stock = yf.Ticker(symbol)
-            data = stock.history(period="1d")
-            
-            if not data.empty:
-                stocks_data.append({
-                    "symbol": symbol,
-                    "price": round(data["Close"].iloc[-1], 2),
-                    "volume": int(data["Volume"].iloc[-1]),
-                    "open": round(data["Open"].iloc[-1], 2),
-                    "high": round(data["High"].iloc[-1], 2),
-                    "low": round(data["Low"].iloc[-1], 2)
-                })
-        except Exception as e:
-            print(f"Error fetching data for {symbol}: {e}")
 
-    return {"nifty50": stocks_data}
+# Unit Test Cases
+class TestStockAPI(unittest.TestCase):
 
-# Run the API with:
-# uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    def setUp(self):
+        """Set up a test client"""
+        from fastapi.testclient import TestClient
+        self.client = TestClient(app)
+
+    def test_read_root(self):
+        """Test root endpoint"""
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Welcome to NIFTY 50 Stock API"})
+
+    def test_get_nifty50(self):
+        """Test stock data API"""
+        response = self.client.get("/nifty50")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.json(), dict)
+        self.assertGreater(len(response.json()), 0)
+
+        for stock, data in response.json().items():
+            self.assertIn("price", data)
+            self.assertIn("volume", data)
+            self.assertIsInstance(data["price"], (int, float))
+            self.assertIsInstance(data["volume"], int)
+
+# Run tests if the script is executed directly
+if __name__ == "__main__":
+    unittest.main()
