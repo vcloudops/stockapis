@@ -14,7 +14,7 @@ Dependecies:
         yfinance 
         pandas
         
-usage:
+Usage:
         Accepts:
             
         NIFTY index symbol (e.g., ^NSEI for NIFTY 50, ^NSEBANK for NIFTY Bank).
