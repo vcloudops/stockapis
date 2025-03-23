@@ -77,5 +77,3 @@ Pull requests are welcome! If you'd like to contribute, feel free to submit issu
 This project is **open-source** and available under the **MIT License**.
 
 ---
-
-### 🚀 **Would you like to add Docker & CI/CD integration?**
