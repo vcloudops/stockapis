@@ -16,10 +16,8 @@ Dependecies:
         
 Usage:
         Accepts:
-            
-        NIFTY index symbol (e.g., ^NSEI for NIFTY 50, ^NSEBANK for NIFTY Bank).
-        Custom period (e.g., 7d, 30d, 90d, 180d).
-        
+            NIFTY index symbol (e.g., ^NSEI for NIFTY 50, ^NSEBANK for NIFTY Bank).
+            Custom period (e.g., 7d, 30d, 90d, 180d).
         Fetches historical closing prices.
         Computes percentage growth.
         Returns growth rate in JSON.
