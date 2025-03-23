@@ -1,6 +1,6 @@
-api name: Index growth
+API Name: Index growth
 
-purpose:
+Purpose:
 
         FastAPI-based API to fetch and calculate the NIFTY index growth over a given period using Yahoo Finance
         Fetch historical closing prices of NIFTY 50 or other indices.
@@ -16,8 +16,10 @@ Dependecies:
         
 usage:
         Accepts:
+            
             NIFTY index symbol (e.g., ^NSEI for NIFTY 50, ^NSEBANK for NIFTY Bank).
             Custom period (e.g., 7d, 30d, 90d, 180d).
+        
         Fetches historical closing prices.
         Computes percentage growth.
         Returns growth rate in JSON.
