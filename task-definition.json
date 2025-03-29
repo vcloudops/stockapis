@@ -4,7 +4,7 @@
     "requiresCompatibilities": ["FARGATE"],
     "cpu": "256",
     "memory": "512",
-    "executionRoleArn": "arn:aws:iam::331852843878:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::<>:role/ecsTaskExecutionRole",
     "containerDefinitions": [
       {
         "name": "api1",
