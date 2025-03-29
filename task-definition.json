@@ -1,0 +1,23 @@
+{
+    "family": "api1-ecs-task",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "256",
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::331852843878:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "name": "api1",
+        "image": "331852843878.dkr.ecr.eu-west-2.amazonaws.com/stockapi:api1_latest",
+        "essential": true,
+        "portMappings": [
+          {
+            "containerPort": 8000,
+            "hostPort": 8000,
+            "protocol": "tcp"
+          }
+        ]
+      }
+    ]
+  }
+  
